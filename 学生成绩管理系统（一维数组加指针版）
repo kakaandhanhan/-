@@ -1,0 +1,266 @@
+#include <stdio.h>
+#include <string.h>
+#define N 30
+void intrudaction();
+void getid_and_score(long* pid, float* pscore, int student_number,long raw_id[N],float raw_score[N]);
+float caculate_average(float* pscore, int student_number, float* toal);
+void descending_score(float* pscore, long* pid, int student_number);
+void ascending_score(float* pscore, long* pid, int student_number);
+void ascending_number(float* pscore, long* pid, int student_number);
+int search_student(long* pid, int student_number,long search_id);
+void statistic_analysis( float* pscore, int student_number);
+int main()
+{
+	int student_number;
+	long student_id[N];
+	float student_score[N];
+	float total = 0;
+	float average = 0;
+	long search_id;
+	int choice;
+	int flag = 0;
+	long raw_id[N];
+	float raw_score[N];
+	int i = 0;
+	printf("Input student number(n<30):\n");
+	scanf("%d", &student_number);
+	while (1)
+	{
+		intrudaction();
+		printf("Please Input your choice:\n");
+		scanf("%d", &choice);
+		if (choice == 1)
+		{
+			getid_and_score(student_id, student_score, student_number,raw_id,raw_score);
+		}
+		else if (choice == 2)
+		{
+			average = caculate_average(student_score, student_number, &total);
+			printf("sum=%.0f,aver=%.2f\n", total, average);
+		}
+		else if (choice == 3)
+		{
+			descending_score(student_score, student_id, student_number);
+		}
+		else if (choice == 4)
+		{
+			ascending_score(student_score, student_id, student_number);
+		}
+		else if (choice == 5)
+		{
+			ascending_number(student_score, student_id, student_number);
+		}
+		else if (choice == 6)
+		{
+			printf("Input the number you want to search:\n");
+			scanf("%ld", &search_id);
+			flag = search_student(student_id, student_number, search_id);
+			if (flag == -1)
+			{
+				printf("Not found!\n");
+			}
+			else
+			{
+				printf("%ld\t%.0f\n", student_id[flag], student_score[flag]);
+			}
+		}
+		else if (choice == 7)
+		{
+			statistic_analysis(student_score, student_number);
+		}
+		else if (choice == 8)
+		{
+			for (i = 0; i < student_number; i++)
+			{
+				printf("%ld\t%.0f\n",student_id[i],student_score[i]);
+			}
+		}
+		else if (choice == 0)
+		{
+			break;
+		}
+		else
+		{
+			printf("Input error!\n");
+		}
+	}
+	printf("End of program!");
+	return 0;
+}
+void getid_and_score(long* pid, float* pscore, int student_number, long raw_id[N], float raw_score[N])
+{
+	printf("Input student's ID and score:\n");
+	int i = 0;
+	for (; i < student_number; i++)
+	{
+		scanf("%ld%f", pid + i, pscore + i);
+		raw_id[i] = *(pid + i);
+		raw_score[i] = *(pscore + i);
+	}
+}
+float caculate_average(float* pscore, int student_number, float* total)
+{
+	int i=0;
+	float average = 0;
+	*total = 0;
+	for (; i < student_number; i++)
+	{
+		*total += *(pscore + i);
+	}
+	average = *total /(float)student_number;
+	return average;
+
+}
+void descending_score(float* pscore, long* pid, int student_number)
+{
+	printf("Sort in descending order by score:\n");
+	long temp_id;
+	float temp_score;
+	int i;
+	int j;
+	for (i = 0; i < student_number-1; i++)
+	{
+		for (j = 0; j < student_number - 1 - i; j++)
+		{
+			if (*(pscore + j) < *(pscore + j + 1))
+			{
+				temp_id = *(pid + j);
+				*(pid + j) = *(pid + j + 1);
+				*(pid + j + 1) = temp_id;
+				temp_score = *(pscore + j);
+				*(pscore + j) = *(pscore + j + 1);
+				*(pscore + j + 1) = temp_score;
+			}
+		}
+	}
+	for (i = 0; i < student_number; i++)
+	{
+		printf("%ld\t%.0f\n", *(pid + i), *(pscore + i));
+	}
+}
+void ascending_score(float* pscore, long* pid, int student_number)
+{
+	printf("Sort in ascending order by score:\n");
+	long temp_id;
+	float temp_score;
+	int i;
+	int j;
+	for (i = 0; i < student_number - 1; i++)
+	{
+		for (j = 0; j < student_number - 1 - i; j++)
+		{
+			if (*(pscore + j) > *(pscore + j + 1))
+			{
+				temp_id = *(pid + j);
+				*(pid + j) = *(pid + j + 1);
+				*(pid + j + 1) = temp_id;
+				temp_score = *(pscore + j);
+				*(pscore + j) = *(pscore + j + 1);
+				*(pscore + j + 1) = temp_score;
+			}
+		}
+	}
+	for (i = 0; i < student_number; i++)
+	{
+		printf("%ld\t%.0f\n", *(pid + i), *(pscore + i));
+	}
+}
+void ascending_number(float* pscore, long* pid, int student_number)
+{
+	printf("Sort in ascending order by number:\n");
+	long temp_id;
+	float temp_score;
+	int i;
+	int j;
+	for (i = 0; i < student_number - 1; i++)
+	{
+		for (j = 0; j < student_number - 1 - i; j++)
+		{
+			if (*(pid + j) > *(pid + j + 1))
+			{
+				temp_id = *(pid + j);
+				*(pid + j) = *(pid + j + 1);
+				*(pid + j + 1) = temp_id;
+				temp_score = *(pscore + j);
+				*(pscore + j) = *(pscore + j + 1);
+				*(pscore + j + 1) = temp_score;
+			}
+		}
+	}
+	for (i = 0; i < student_number; i++)
+	{
+		printf("%ld\t%.0f\n", *(pid + i), *(pscore + i));
+	}
+}
+int search_student(long* pid, int student_number, long search_id)
+{
+	int i = 0;
+	for (; i < student_number; i++)
+	{
+		if (*(pid + i) == search_id)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+void intrudaction()
+{
+	printf("Management for Students' scores\n");
+	printf("1.Input record\n");
+	printf("2.Caculate total and average score of course\n");
+	printf("3.Sort in descending order by score\n");
+	printf("4.Sort in ascending order by score\n");
+	printf("5.Sort in ascending order by number\n");
+	printf("6.Search by number\n");
+	printf("7.Statistic analysis\n");
+	printf("8.List record\n");
+	printf("0.Exit\n");
+}
+void statistic_analysis( float* pscore, int student_number)
+{
+	int number60=0;
+	int number60_69=0;
+	int number70_79 = 0;
+	int number80_89 = 0;
+	int number90_99 = 0;
+	int number100 = 0;
+	int i = 0;
+	for (; i < student_number; i++)
+	{
+		if (*(pscore + i) < 60)
+		{
+			number60++;
+		}
+		else if (*(pscore + i) >= 60 && *(pscore + i) <= 69)
+		{
+			number60_69++;
+		}
+		else if (*(pscore + i) >= 70 && *(pscore + i) <= 79)
+		{
+			number70_79++;
+		}
+		else if (*(pscore + i) >= 80 && *(pscore + i) <= 89)
+		{
+			number80_89++;
+		}
+		else if (*(pscore + i) >= 90 && *(pscore + i) <= 99)
+		{
+			number90_99++;
+		}
+		else
+		{
+			number100++;
+		}
+	}
+	printf("<60\t%d\t%.2f%%\n",number60, (float)number60*100 /(float) student_number);
+	printf("%d-%d\t%d\t%.2f%%\n", 60,69,number60_69, (float)number60_69*100 / (float)student_number);
+	printf("%d-%d\t%d\t%.2f%%\n", 70,79,number70_79, (float)number70_79*100 / (float)student_number);
+	printf("%d-%d\t%d\t%.2f%%\n",80,89, number80_89, (float)number80_89*100 / (float)student_number);
+	printf("%d-%d\t%d\t%.2f%%\n", 90,99,number90_99, (float)number90_99*100 / (float)student_number);
+	printf("%d\t%d\t%.2f%%\n", 100, number100, (float)number100*100 / (float)student_number);
+}
+
+	
+
+
